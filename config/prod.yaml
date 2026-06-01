@@ -1,0 +1,8 @@
+app_name: vills
+debug: false
+log_level: INFO
+log_json: true
+db_pool_size: 20
+redis_default_ttl: 1800
+cors_allow_origins:
+  - https://app.vills.app
