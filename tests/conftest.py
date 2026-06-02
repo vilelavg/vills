@@ -80,6 +80,8 @@ async def db_session():
     from vills.db.base import Base
     from vills.tenancy import models  # noqa: F401 — registra tabelas
 
+    # Recarrega o .env porque settings_factory/_clear_env pode ter removido DATABASE_URL
+    _load_dotenv()
     url = os.environ.get("DATABASE_URL", "postgresql+asyncpg://vills:vills@localhost:5432/vills")
     engine = create_async_engine(url)
     try:
