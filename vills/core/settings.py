@@ -56,9 +56,7 @@ class Settings(BaseSettings):
     otel_exporter_otlp_endpoint: str = ""
     otel_service_name: str = "vills-api"
 
-    database_url: SecretStr = SecretStr(
-        "postgresql+asyncpg://vills:vills@localhost:5432/vills"
-    )
+    database_url: SecretStr = SecretStr("postgresql+asyncpg://vills:vills@localhost:5432/vills")
     db_echo: bool = False
     db_pool_size: int = 10
 

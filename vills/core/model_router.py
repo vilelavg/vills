@@ -4,7 +4,7 @@ e circuit breaker. Resolve os pontos críticos de resiliência do diagnóstico."
 import asyncio
 import time
 from dataclasses import dataclass
-from enum import Enum
+from enum import StrEnum
 from typing import Any
 
 from vills.observability.logging import get_logger
@@ -12,7 +12,7 @@ from vills.observability.logging import get_logger
 log = get_logger(__name__)
 
 
-class TaskComplexity(str, Enum):
+class TaskComplexity(StrEnum):
     FAST = "fast"
     STANDARD = "standard"
     COMPLEX = "complex"
@@ -113,6 +113,4 @@ class ModelRouter:
                     if attempt < self._max_retries:
                         await asyncio.sleep(min(2**attempt, 8))
 
-        raise CircuitOpenError(
-            f"Todos os modelos da cadeia {complexity} falharam"
-        ) from last_error
+        raise CircuitOpenError(f"Todos os modelos da cadeia {complexity} falharam") from last_error

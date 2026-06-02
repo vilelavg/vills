@@ -1,4 +1,5 @@
 import pytest
+from pydantic import ValidationError
 
 
 def test_cors_from_csv_env(settings_factory):
@@ -42,5 +43,5 @@ def test_all_environment_configs_valid(settings_factory, env):
 
 
 def test_invalid_environment_rejected(settings_factory):
-    with pytest.raises(Exception):
+    with pytest.raises(ValidationError):
         settings_factory(environment="producao")

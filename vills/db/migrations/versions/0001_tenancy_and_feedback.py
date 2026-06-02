@@ -44,9 +44,7 @@ def upgrade() -> None:
             ondelete="CASCADE",
             name="fk_agency_clients_agency_id_agencies",
         ),
-        sa.UniqueConstraint(
-            "agency_id", "slug", name="uq_agency_clients_agency_id_slug"
-        ),
+        sa.UniqueConstraint("agency_id", "slug", name="uq_agency_clients_agency_id_slug"),
     )
     op.create_index("ix_agency_clients_agency_id", "agency_clients", ["agency_id"])
     op.create_table(

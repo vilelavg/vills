@@ -2,7 +2,7 @@
 aprendizado contínuo. Presente desde a F1, não relegado a fases futuras."""
 
 import uuid
-from enum import Enum
+from enum import StrEnum
 
 from sqlalchemy import Float, String, Text
 from sqlalchemy.dialects.postgresql import JSONB, UUID
@@ -13,7 +13,7 @@ from vills.db.base import Base, TenantMixin, TimestampMixin
 from vills.tenancy.context import TenantContext
 
 
-class ActionOutcome(str, Enum):
+class ActionOutcome(StrEnum):
     SUCCESS = "success"
     FAILURE = "failure"
     PARTIAL = "partial"
@@ -25,9 +25,7 @@ class ActionLog(Base, TenantMixin, TimestampMixin):
 
     __tablename__ = "action_logs"
 
-    id: Mapped[uuid.UUID] = mapped_column(
-        UUID(as_uuid=True), primary_key=True, default=uuid.uuid4
-    )
+    id: Mapped[uuid.UUID] = mapped_column(UUID(as_uuid=True), primary_key=True, default=uuid.uuid4)
     client_id: Mapped[uuid.UUID | None] = mapped_column(
         UUID(as_uuid=True), index=True, nullable=True
     )

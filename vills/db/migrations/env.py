@@ -7,10 +7,10 @@ from alembic import context
 from sqlalchemy import pool
 from sqlalchemy.ext.asyncio import async_engine_from_config
 
+from vills.core import feedback_loop  # noqa: F401 — registra action_logs
 from vills.core.settings import get_settings
 from vills.db.base import Base
 from vills.tenancy import models  # noqa: F401 — registra as tabelas
-from vills.core import feedback_loop  # noqa: F401 — registra action_logs
 
 config = context.config
 

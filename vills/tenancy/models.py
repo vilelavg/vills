@@ -1,7 +1,7 @@
 """Modelos de tenant hierárquico: Agency (raiz) → AgencyClient (filho)."""
 
 import uuid
-from enum import Enum
+from enum import StrEnum
 
 from sqlalchemy import ForeignKey, String, UniqueConstraint
 from sqlalchemy.dialects.postgresql import JSONB, UUID
@@ -10,7 +10,7 @@ from sqlalchemy.orm import Mapped, mapped_column, relationship
 from vills.db.base import Base, TimestampMixin
 
 
-class TenantStatus(str, Enum):
+class TenantStatus(StrEnum):
     ACTIVE = "active"
     SUSPENDED = "suspended"
     ARCHIVED = "archived"
@@ -21,9 +21,7 @@ class Agency(Base, TimestampMixin):
 
     __tablename__ = "agencies"
 
-    id: Mapped[uuid.UUID] = mapped_column(
-        UUID(as_uuid=True), primary_key=True, default=uuid.uuid4
-    )
+    id: Mapped[uuid.UUID] = mapped_column(UUID(as_uuid=True), primary_key=True, default=uuid.uuid4)
     name: Mapped[str] = mapped_column(String(200), nullable=False)
     slug: Mapped[str] = mapped_column(String(80), unique=True, nullable=False)
     status: Mapped[TenantStatus] = mapped_column(
@@ -44,9 +42,7 @@ class AgencyClient(Base, TimestampMixin):
         UniqueConstraint("agency_id", "slug", name="uq_agency_clients_agency_id_slug"),
     )
 
-    id: Mapped[uuid.UUID] = mapped_column(
-        UUID(as_uuid=True), primary_key=True, default=uuid.uuid4
-    )
+    id: Mapped[uuid.UUID] = mapped_column(UUID(as_uuid=True), primary_key=True, default=uuid.uuid4)
     agency_id: Mapped[uuid.UUID] = mapped_column(
         UUID(as_uuid=True),
         ForeignKey("agencies.id", ondelete="CASCADE"),

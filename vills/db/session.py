@@ -29,9 +29,7 @@ def init_engine() -> AsyncEngine:
             pool_size=settings.db_pool_size,
             pool_pre_ping=True,
         )
-        _sessionmaker = async_sessionmaker(
-            _engine, expire_on_commit=False, class_=AsyncSession
-        )
+        _sessionmaker = async_sessionmaker(_engine, expire_on_commit=False, class_=AsyncSession)
     return _engine
 
 

@@ -33,6 +33,4 @@ class TimestampMixin:
 
 
 class TenantMixin:
-    tenant_id: Mapped[uuid.UUID] = mapped_column(
-        UUID(as_uuid=True), index=True, nullable=False
-    )
+    tenant_id: Mapped[uuid.UUID] = mapped_column(UUID(as_uuid=True), index=True, nullable=False)

@@ -34,9 +34,7 @@ class PromptEngine:
         try:
             template = self._env.get_template(f"{template_name}.j2")
         except Exception as exc:
-            raise PromptTemplateNotFoundError(
-                f"Template '{template_name}' não encontrado"
-            ) from exc
+            raise PromptTemplateNotFoundError(f"Template '{template_name}' não encontrado") from exc
 
         config = tenant.merged_config()
         context_vars = {

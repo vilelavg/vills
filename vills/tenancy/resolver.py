@@ -52,9 +52,7 @@ class TenantResolver:
         )
 
     async def _get_agency(self, slug: str) -> Agency:
-        result = await self._session.execute(
-            select(Agency).where(Agency.slug == slug)
-        )
+        result = await self._session.execute(select(Agency).where(Agency.slug == slug))
         agency = result.scalar_one_or_none()
         if agency is None:
             raise TenantNotFoundError(f"Agência '{slug}' não encontrada")
