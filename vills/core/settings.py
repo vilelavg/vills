@@ -56,7 +56,9 @@ class Settings(BaseSettings):
     otel_exporter_otlp_endpoint: str = ""
     otel_service_name: str = "vills-api"
 
-    database_url: SecretStr = SecretStr("postgresql+asyncpg://vills:vills@localhost:5432/vills")
+    database_url: SecretStr = SecretStr(
+        "postgresql+asyncpg://vills:vills@localhost:5432/vills"
+    )
     db_echo: bool = False
     db_pool_size: int = 10
 
@@ -67,6 +69,17 @@ class Settings(BaseSettings):
     api_v1_prefix: str = "/api/v1"
 
     anthropic_api_key: SecretStr = SecretStr("")
+
+    # --- F2: Seguranca ---
+    jwt_secret_key: SecretStr = SecretStr("CHANGE_ME_IN_PRODUCTION")
+    jwt_algorithm: str = "HS256"
+    access_token_expire_minutes: int = 15
+    refresh_token_expire_days: int = 7
+    encryption_key: SecretStr = SecretStr("CHANGE_ME_IN_PRODUCTION")
+    mfa_required: bool = False
+
+    # --- F2: Celery ---
+    celery_broker_url: SecretStr = SecretStr("redis://localhost:6379/1")
 
     @field_validator("cors_allow_origins", mode="before")
     @classmethod
@@ -90,6 +103,9 @@ class Settings(BaseSettings):
         data["database_url"] = "***masked***"
         data["redis_url"] = "***masked***"
         data["anthropic_api_key"] = "***masked***"
+        data["jwt_secret_key"] = "***masked***"
+        data["encryption_key"] = "***masked***"
+        data["celery_broker_url"] = "***masked***"
         return data
 
     @classmethod

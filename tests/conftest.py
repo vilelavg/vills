@@ -75,17 +75,26 @@ async def db_session():
     Carrega DATABASE_URL do .env (via _load_dotenv acima) ou do ambiente.
     Se não houver Postgres acessível, o teste é pulado com mensagem clara.
     """
+    from sqlalchemy import text as sa_text
     from sqlalchemy.ext.asyncio import async_sessionmaker, create_async_engine
     from vills.core import feedback_loop  # noqa: F401 — registra action_logs
     from vills.db.base import Base
     from vills.tenancy import models  # noqa: F401 — registra tabelas
+    from vills.security import models as _sec_models  # noqa: F401 — registra agency_users
+    from vills.security import audit as _audit_models  # noqa: F401 — registra audit_logs
+    from vills.memory import models as _mem_models  # noqa: F401 — registra memory_chunks
 
     # Recarrega o .env porque settings_factory/_clear_env pode ter removido DATABASE_URL
     _load_dotenv()
-    url = os.environ.get("DATABASE_URL", "postgresql+asyncpg://vills:vills@localhost:5432/vills")
+    url = os.environ.get(
+        "DATABASE_URL", "postgresql+asyncpg://vills:vills@localhost:5432/vills"
+    )
     engine = create_async_engine(url)
     try:
         async with engine.begin() as conn:
+            # Extensões antes do create_all (MemoryChunk usa o tipo Vector) — R3
+            await conn.execute(sa_text("CREATE EXTENSION IF NOT EXISTS vector"))
+            await conn.execute(sa_text("CREATE EXTENSION IF NOT EXISTS pg_trgm"))
             await conn.run_sync(Base.metadata.drop_all)
             await conn.run_sync(Base.metadata.create_all)
     except Exception as exc:  # noqa: BLE001
